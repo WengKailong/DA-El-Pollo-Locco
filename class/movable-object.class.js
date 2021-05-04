@@ -10,6 +10,8 @@ class MovableObject {
 
     speed = 0.15;
 
+    otherDirection = false;
+
     loadImage(path){
         this.img = new Image();
         this.img.src = path;
@@ -36,6 +38,13 @@ class MovableObject {
 
     moveLeft(){
             setInterval(() => { this.x -= this.speed; }, 1000/60);
+    }
+
+    playWalkAnimaton(WALKING_IMAGES){
+        let mod = this.currImage % WALKING_IMAGES.length;
+        let path = WALKING_IMAGES[mod];
+        this.img = this.imgCache[path];
+        this.currImage++;
     }
 
 }
