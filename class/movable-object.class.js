@@ -1,50 +1,90 @@
-class MovableObject {
-    x = 120;
-    y = 280;
-    height = 150;
-    width = 100;
-    img;
+class MovableObject extends DrawableObject {
+  speed = 0.15;
+  speedY = 0;
+  acceleration = 2.5;
 
-    imgCache = {};
-    currImage = 0;
+  otherDirection = false;
 
-    speed = 0.15;
+  collision = false;
+  energy = 100;
 
-    otherDirection = false;
+  lastHit = 0;
 
-    loadImage(path){
-        this.img = new Image();
-        this.img.src = path;
+  applyGravity() {
+    setInterval(() => {
+      if (this.isAboveGround() || this.speedY < 0) {
+        this.y += this.speedY;
+        this.speedY += this.acceleration;
+      }
+    }, 1000 / 25);
+  }
+
+  isAboveGround() {
+    if(this instanceof ThrowableObject){
+      return true;
+    }else{
+      return this.y < 180;
+    }
+  }
+
+  moveRight(params) {
+    console.log("moving right");
+  }
+
+  playAnimaton(ANIMATION_IMAGES) {
+    let mod = this.currImage % ANIMATION_IMAGES.length;
+    let path = ANIMATION_IMAGES[mod];
+    this.img = this.imgCache[path];
+    this.currImage++;
+  }
+
+  moveLeft() {
+    this.x -= this.speed;
+  }
+
+  moveRight() {
+    this.x += this.speed;
+  }
+
+  jump() {
+    this.speedY = -30;
+    this.jumping_sound.play();
+  }
+
+  
+
+  // to check wheter character is colliding with chicken.
+
+  isColliding(mo) {
+    if (
+      this.x + this.width > mo.x &&
+      this.y + this.height > mo.y &&
+      this.x < mo.x &&
+      this.y < mo.y + mo.height
+    ) {
+      return true;
+    }
+    return false;
+  }
+
+  hit() {
+    if (this.energy > 0) {
+      this.energy -= 5;
     }
 
-/**
- * 
- * @param {Array} arr - ['img/image1.png', 'img/image2.png', ...] 
- */
+    this.lastHit = new Date().getTime();
+  }
 
-    loadImages(arr){
+  isDead() {
+    return this.energy == 0;
+  }
 
-        arr.forEach((path) => {
-            let img = new Image();
-            img.src = path;
-            this.imgCache[path] = img;
-        });
-
+  isHurt() {
+    let timePassed = new Date().getTime() - this.lastHit;
+    if (timePassed > 1000) {
+      return false;
+    } else {
+      return true;
     }
-
-    moveRight(params) {
-       console.log('moving right'); 
-    }
-
-    moveLeft(){
-            setInterval(() => { this.x -= this.speed; }, 1000/60);
-    }
-
-    playWalkAnimaton(WALKING_IMAGES){
-        let mod = this.currImage % WALKING_IMAGES.length;
-        let path = WALKING_IMAGES[mod];
-        this.img = this.imgCache[path];
-        this.currImage++;
-    }
-
+  }
 }

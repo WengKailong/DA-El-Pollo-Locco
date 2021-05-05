@@ -1,10 +1,13 @@
 class World {
   character = new Character();
   level = Level1;
+  statusBar = new StatusBar();
   ctx;
   canvas;
   keyboard;
   camera_x = 0;
+
+  throwableObjects = [];
 
   constructor(canvas, keyboard) {
     this.canvas = canvas;
@@ -12,6 +15,7 @@ class World {
     this.keyboard = keyboard;
     this.draw();
     this.setWorld();
+    this.run();
   }
 
   setWorld() {
@@ -27,8 +31,14 @@ class World {
     this.addObjectsToMap(this.level.clouds);
 
     this.addObjectsToMap(this.level.enemies);
+    this.addObjectsToMap(this.throwableObjects);
 
     this.addToMap(this.character);
+
+    // space for unmovable objects
+    this.ctx.translate(-this.camera_x, 0); // translate canvas for unmovable status bar
+    this.addToMap(this.statusBar);
+    this.ctx.translate(this.camera_x, 0);
 
     this.ctx.translate(-this.camera_x, 0);
 
@@ -46,20 +56,52 @@ class World {
   }
 
   addToMap(mo) {
-    if(mo.otherDirection){
-      this.ctx.save();
-      this.ctx.translate(mo.width,0);
-      this.ctx.scale(-1,1);
-      mo.x = -mo.x;
+    if (mo.otherDirection) {
+      this.flipImage(mo);
     }
 
-    this.ctx.drawImage(mo.img, mo.x, mo.y, mo.width, mo.height);
+    mo.draw(this.ctx);
 
-    if(mo.otherDirection){
-      mo.x = -mo.x;
-      this.ctx.restore();
-      
+    mo.drawFrame(this.ctx);
+
+    if (mo.otherDirection) {
+      this.flipImageBack(mo);
     }
+  }
 
+  flipImage(mo) {
+    this.ctx.save();
+    this.ctx.translate(mo.width, 0);
+    this.ctx.scale(-1, 1);
+    mo.x = -mo.x;
+  }
+
+  flipImageBack(mo) {
+    mo.x = -mo.x;
+    this.ctx.restore();
+  }
+
+  run() {
+    setInterval(() => {
+      this.checkCollisions();
+      this.checkThrowObjects();
+    }, 200);
+  }
+
+  checkThrowObjects(){
+    if(this.keyboard.THROW){
+      let bottle = new ThrowableObject(this.character.x, this.character.y);
+      this.throwableObjects.push(bottle);
+    }
+  }
+
+  checkCollisions() {
+    this.level.enemies.forEach((enemy) => {
+      if (this.character.isColliding(enemy)) {
+        this.character.hit();
+        this.statusBar.setPercentage(this.character.energy);
+        console.log(this.character.energy);
+      }
+    });
   }
 }

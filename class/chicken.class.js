@@ -9,6 +9,8 @@ class Chicken extends MovableObject {
     "img/3.Secuencias_Enemy_boico/Versi_Gallinita (estas salen por orden de la gallina gigantona)/3.Ga_paso izquierdo.png",
   ];
 
+ 
+
 
 
   constructor() {
@@ -24,10 +26,12 @@ class Chicken extends MovableObject {
 
   animate() {
 
-    this.moveLeft();
+    setInterval(() => {
+      this.moveLeft();
+    }, 1000 / 60);
 
     setInterval(() => {
-        this.playWalkAnimaton(this.IMAGES_WALKING);
+        this.playAnimaton(this.IMAGES_WALKING);
     },100);
   }
 
