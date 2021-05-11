@@ -10,11 +10,10 @@ function init() {
   world = new World(canvas, keyboard);
 
   console.log("my character is ", world.character);
-  console.log("my enemies are ", world.enemies);
 }
 
 window.addEventListener("keydown", (event) => {
-  console.log(event);
+  
   switch (event.keyCode) {
     case 38:
       keyboard.UP = true;
@@ -37,7 +36,6 @@ window.addEventListener("keydown", (event) => {
     default:
     // code block
   }
-  console.log(keyboard);
 });
 
 window.addEventListener("keyup", (event) => {

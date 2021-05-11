@@ -1,43 +1,43 @@
 class StatusBar extends DrawableObject {
-  x = 30;
-  y = 0;
+  x;
+  y;
   height = 60;
   width = 200;
-  IMAGES = [
-    "img/7.Marcadores/Barra/Marcador vida/azul/0_.png",
-    "img/7.Marcadores/Barra/Marcador vida/azul/20_.png",
-    "img/7.Marcadores/Barra/Marcador vida/azul/40_.png",
-    "img/7.Marcadores/Barra/Marcador vida/azul/60_.png",
-    "img/7.Marcadores/Barra/Marcador vida/azul/80_.png",
-    "img/7.Marcadores/Barra/Marcador vida/azul/100_.png",
-  ];
-
+  belongTo;
+  IMAGES_PERCENTAGE;
   percentage = 100;
+  imgCache = {};
 
-  constructor() {
-    super().loadImages(this.IMAGES);
-    this.setPercentage(100);
+  constructor(x, y, startPercentage, IMAGES) {
+    super();
+    this.x = x;
+    this.y = y;
+    this.IMAGES_PERCENTAGE = IMAGES;
+    this.loadImages(IMAGES);
+
+    this.setPercentage(startPercentage);
   }
 
   // set percentage for animation of status bar
   setPercentage(percentage) {
     this.percentage = percentage;
-    let path = this.IMAGES[this.getImageIndex()];
-    
+    let path;
+
+    path = this.IMAGES_PERCENTAGE[this.getImageIndex()];
+
     this.img = this.imgCache[path];
-    
   }
 
   getImageIndex() {
     if (this.percentage == 100) {
       return 5;
-    } else if (this.percentage > 80) {
+    } else if (this.percentage >= 80) {
       return 4;
-    } else if (this.percentage > 60) {
+    } else if (this.percentage >= 60) {
       return 3;
-    } else if (this.percentage > 40) {
+    } else if (this.percentage >= 40) {
       return 2;
-    } else if (this.percentage > 20) {
+    } else if (this.percentage >= 20) {
       return 1;
     } else {
       return 0;

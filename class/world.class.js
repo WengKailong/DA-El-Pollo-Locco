@@ -1,7 +1,7 @@
 class World {
   character = new Character();
   level = Level1;
-  statusBar = new StatusBar();
+  statusBar = StatusBars;
   ctx;
   canvas;
   keyboard;
@@ -15,11 +15,19 @@ class World {
     this.keyboard = keyboard;
     this.draw();
     this.setWorld();
-    this.run();
   }
 
   setWorld() {
     this.character.world = this;
+    this.level.enemies.forEach((enemy) => {
+      enemy.world = this;
+    });
+
+    this.level.collectableItems.forEach((item) => {
+      item.world = this;
+    });
+
+    console.log(this.level.enemies[0].world);
   }
 
   draw() {
@@ -29,7 +37,7 @@ class World {
 
     this.addObjectsToMap(this.level.backgroundObjects);
     this.addObjectsToMap(this.level.clouds);
-
+    this.addObjectsToMap(this.level.collectableItems);
     this.addObjectsToMap(this.level.enemies);
     this.addObjectsToMap(this.throwableObjects);
 
@@ -37,7 +45,7 @@ class World {
 
     // space for unmovable objects
     this.ctx.translate(-this.camera_x, 0); // translate canvas for unmovable status bar
-    this.addToMap(this.statusBar);
+    this.addObjectsToMap(this.statusBar);
     this.ctx.translate(this.camera_x, 0);
 
     this.ctx.translate(-this.camera_x, 0);
@@ -79,29 +87,5 @@ class World {
   flipImageBack(mo) {
     mo.x = -mo.x;
     this.ctx.restore();
-  }
-
-  run() {
-    setInterval(() => {
-      this.checkCollisions();
-      this.checkThrowObjects();
-    }, 200);
-  }
-
-  checkThrowObjects(){
-    if(this.keyboard.THROW){
-      let bottle = new ThrowableObject(this.character.x, this.character.y);
-      this.throwableObjects.push(bottle);
-    }
-  }
-
-  checkCollisions() {
-    this.level.enemies.forEach((enemy) => {
-      if (this.character.isColliding(enemy)) {
-        this.character.hit();
-        this.statusBar.setPercentage(this.character.energy);
-        console.log(this.character.energy);
-      }
-    });
   }
 }

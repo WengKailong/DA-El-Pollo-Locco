@@ -7,7 +7,7 @@ class DrawableObject {
   img;
 
   imgCache = {};
-  currImage = 0;
+  
 
   loadImage(path) {
     this.img = new Image();
@@ -39,7 +39,7 @@ class DrawableObject {
       frameColor = "blue";
     }
 
-    if (this instanceof Character || this instanceof Chicken) {
+    if (this instanceof Character || this instanceof Chicken || this instanceof ThrowableObject || this instanceof CollectableItem) {
       ctx.beginPath();
       ctx.lineWidth = "5";
       ctx.strokeStyle = frameColor;
