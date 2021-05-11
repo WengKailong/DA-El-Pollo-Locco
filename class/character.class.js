@@ -107,7 +107,7 @@ class Character extends MovableObject {
 
       if (
         this.world.keyboard.RIGHT &&
-        this.inWalkableArea &&
+        this.inWalkableArea() &&
         !this.isAboveGround()
       ) {
         this.motionStatus = "WALKING";
@@ -119,7 +119,7 @@ class Character extends MovableObject {
 
       if (
         this.world.keyboard.LEFT &&
-        this.inWalkableArea &&
+        this.inWalkableArea() &&
         !this.isAboveGround()
       ) {
         this.motionStatus = "WALKING";

@@ -38,8 +38,11 @@ const Level1 = new Level(
         new BackgroundObject("img/5.Fondo/Capas/3.Fondo3/2.png", 719*5),
         new BackgroundObject("img/5.Fondo/Capas/2.Fondo2/2.png", 719*5),
         new BackgroundObject("img/5.Fondo/Capas/1.suelo-fondo1/2.png", 719*5),
-
-
+      ],
+      [
+        new BackgroundObject('img/9.Intro _ Outro Image/Start Screen/Opci 1.png', 0),
+        new BackgroundObject('img/9.Intro _ Outro Image/_Game over_ screen/2.oh no you lost!.png', 0),
+        new BackgroundObject('img/9.Intro _ Outro Image/_Game over_ screen/4.Game over!.png', 0)
       ]
 
 );

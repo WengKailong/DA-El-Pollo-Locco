@@ -65,19 +65,17 @@ class Endboss extends Chicken {
 
   startMotion() {
     var motion_endboss = setInterval(() => {
-      
-      
-      if(this.isHurt()){
-        this.motionStatus = 'HURT';
-      }
-      if (this.isDead()) {
-        this.motionStatus = 'DEAD';
-        clearInterval(motion_endboss);
+      if (this.isHurt()) {
+        this.motionStatus = "HURT";
       } else {
         this.checkEngage();
       }
+
+      if (this.isDead()) {
+        this.motionStatus = "DEAD";
+        clearInterval(motion_endboss);
+      }
       //console.log('endboss status', this.motionStatus);
-      
     }, 100);
   }
 
@@ -85,8 +83,10 @@ class Endboss extends Chicken {
     if (this.engageCharacter()) {
       this.motionStatus = "ALERT";
       this.lastEngage = new Date().getTime();
-      
-      setTimeout(() => {this.attack();}, 1000);
+
+      setTimeout(() => {
+        this.attack();
+      }, 1000);
     } else {
       let timePassed = new Date().getTime() - this.lastEngage;
       if (timePassed > 3000) {
@@ -96,29 +96,27 @@ class Endboss extends Chicken {
     }
   }
 
-  attack(){
-    if(this.motionStatus == 'ALERT'){
-      this.motionStatus = 'ATTACK';
-      console.log('ATTACK!!!');
-      if(this.checkCharacterPosition() == 'left'){
+  attack() {
+    if (this.motionStatus == "ALERT") {
+      this.motionStatus = "ATTACK";
+      console.log("ATTACK!!!");
+      if (this.checkCharacterPosition() == "left") {
         this.otherDirection = false;
         this.moveLeft();
       }
 
-      if(this.checkCharacterPosition() == 'right'){
+      if (this.checkCharacterPosition() == "right") {
         this.otherDirection = true;
         this.moveRight();
       }
-
     }
-   
   }
 
-  checkCharacterPosition(){
-    if(this.x > this.world.character.x){
-      return 'left';
-    }else{
-      return 'right';
+  checkCharacterPosition() {
+    if (this.x > this.world.character.x) {
+      return "left";
+    } else {
+      return "right";
     }
   }
 
@@ -149,7 +147,7 @@ class Endboss extends Chicken {
 
   isHurt() {
     let timePassed = new Date().getTime() - this.lastHit;
-    if (timePassed > 1000) {
+    if (timePassed > 500) {
       return false;
     } else {
       return true;

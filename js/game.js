@@ -62,3 +62,11 @@ window.addEventListener("keyup", (event) => {
     // code block
   }
 });
+
+
+function startGame(){
+  console.log('test');
+  world.gameStatus = 'run';
+}
+
+
